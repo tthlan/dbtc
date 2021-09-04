@@ -196,7 +196,7 @@ class Controller_PublishDate extends Controller_Rest
 
 		return true;
 	}
-	
+
 	public function post_create()
 	{
 		$email = isset($_POST["email"]) ? $_POST["email"] : null; //"hlanart @gmail.com";
@@ -241,6 +241,40 @@ class Controller_PublishDate extends Controller_Rest
 			$data['response']['message'] = 'Không tồn tại email với mã. Vui lòng tạo token mới'; // Fail Progress
 
 			return $this->response($data);
+		}
+	}
+
+	public function put_expand()
+	{
+		$email = isset($_REQUEST["email"]) ? $_REQUEST["email"] : null; //"hlanart @gmail.com";
+		$token = isset($_REQUEST["token"]) ? $_REQUEST["token"] : null; //"ABCD1234";
+		$expandMode = isset($_REQUEST["expandMode"]) ? $_REQUEST["expandMode"] : null; // minute, day, week, month, quater, year
+		$expandValue = isset($_REQUEST["expandValue"]) ? intval($_REQUEST["expandValue"]) : null;
+
+		$entry = Model_Publishdate::find(
+			array(
+				'select' => array('*'),
+				'where' => DB::expr(
+					"status = " . Model_Publishdate::STATUS_PUPBLISHED . " AND " .
+					"email like '" . $email . "' AND token like '" . $token . "'"
+				),
+			)
+		);
+
+		if (isset($entry)){
+			$record = $entry[0];
+
+			$publishDate = date_create($record->publish_date)
+				->add(date_interval_create_from_date_string($expandValue . " " . $expandMode ."s"))
+				->format('Y-m-d H:i:s');
+
+			$record->publish_date = $publishDate;
+			$record->luna_date = null;
+			$record->run_date = null;
+			$record->status = Model_Publishdate::STATUS_CREATED;
+			$record->save();
+
+			return $this->response($record);
 		}
 	}
 }
