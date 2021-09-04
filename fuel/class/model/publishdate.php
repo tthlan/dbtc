@@ -5,10 +5,10 @@ class Model_Publishdate extends \Model_Crud {
     /*protected static $_primary_key = array('id'); 
     protected static $_properties = array('id', 'remote_addr',	'lastest',	'count');*/
 	
-	constant STATUS_NON_AUTHEN = 0;
-	constant STATUS_AUTHENTICATED = 1;
-	constant STATUS_CREATED = 2;
-	constant STATUS_PUPBLISHED = 3;
+	const STATUS_NEW = 0;
+	const STATUS_AUTHENTICATED = 1;
+	const STATUS_CREATED = 2;
+	const STATUS_PUPBLISHED = 3;
 
     protected static $_observers =
         array(

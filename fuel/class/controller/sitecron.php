@@ -22,7 +22,7 @@ class Controller_Sitecron extends Controller
 			$dataSet = Model_Publishdate::find(
 			array(
 					'select' => array('*'),
-					'where' => DB::expr("DATEDIFF(publish_date, now()) = 0 AND status = 0")
+					'where' => DB::expr("DATEDIFF(publish_date, now()) = 0 AND status = " . Model_Publishdate::STATUS_CREATED)
 				)
 			);
 			
@@ -41,7 +41,7 @@ class Controller_Sitecron extends Controller
 					$result = $this->cron_mail($dataMailing);
 					if ($result == true){					
 						$publishData->set(array(
-							'status'  => 1,
+							'status'  => Model_Publishdate::STATUS_PUPBLISHED,
 							'run_date' => $cDate
 						));
 
@@ -77,7 +77,7 @@ class Controller_Sitecron extends Controller
 		//$email->body('Bạn có một tin nhắn đã được tạo trước với nội dung:' . $data['message']);
 		var_dump($data);
 		$email->html_body(\View::forge(
-				'email/amlich', $data
+				'email/publishmessage', $data
 			),			
 		);
 
