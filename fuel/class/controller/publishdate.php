@@ -244,7 +244,7 @@ class Controller_PublishDate extends Controller_Rest
 		}
 	}
 
-	public function put_expand()
+	public function get_expand()
 	{
 		$email = isset($_REQUEST["email"]) ? $_REQUEST["email"] : null; //"hlanart @gmail.com";
 		$token = isset($_REQUEST["token"]) ? $_REQUEST["token"] : null; //"ABCD1234";
@@ -260,6 +260,8 @@ class Controller_PublishDate extends Controller_Rest
 				),
 			)
 		);
+		
+		$this->format = 'html';
 
 		if (isset($entry)){
 			$record = $entry[0];
@@ -274,7 +276,10 @@ class Controller_PublishDate extends Controller_Rest
 			$record->status = Model_Publishdate::STATUS_CREATED;
 			$record->save();
 
-			return $this->response($record);
+			echo "<h3 style='font-size:5.0vh;max-width:100%;line-height: 200px;text-align: center;'>Cài đặt lập tin nhắn thành công! Cám ơn bạn đã sử dụng</h3>";
+		}
+		else{
+			echo "<h3 style='font-size:5.0vh;max-width:100%;line-height: 200px;text-align: center;;'>Không thể cài đặt lập tin nhắn! Hãy quay lại sau!</h3>";
 		}
 	}
 }
